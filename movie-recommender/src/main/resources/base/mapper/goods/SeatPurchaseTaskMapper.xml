@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wepiao.goods.mapper.goods.SeatPurchaseTaskMapper" >
+  <resultMap id="BaseResultMap" type="com.wepiao.goods.model.goods.SeatPurchaseTask" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="schedule_id" property="scheduleId" jdbcType="INTEGER" />
+    <result column="seat" property="seat" jdbcType="VARCHAR" />
+    <result column="seat_status" property="seatStatus" jdbcType="TINYINT" />
+    <result column="cinema_no" property="cinemaNo" jdbcType="INTEGER" />
+    <result column="hall_id" property="hallId" jdbcType="VARCHAR" />
+    <result column="hall_name" property="hallName" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="TINYINT" />
+    <result column="show_time" property="showTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, schedule_id, seat, seat_status, cinema_no, hall_id, hall_name, source, show_time, 
+    created_time, modified_time
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from seat_purchase_task
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="getByCreateTime" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from seat_purchase_task
+    where created_time > #{createdTime,jdbcType=TIMESTAMP}
+    order
+    by created_time limit #{count,jdbcType=INTEGER}
+  </select>
+  <select id="getBySeatStatus" resultMap="BaseResultMap" parameterType="java.lang.Byte" >
+    select
+    <include refid="Base_Column_List"/>
+    from seat_purchase_task
+	where seat_status in 
+	<foreach collection="seatStatus" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+  </select>
+  <insert id="insert" parameterType="com.wepiao.goods.model.goods.SeatPurchaseTask" >
+    insert into seat_purchase_task (id, schedule_id, seat, 
+      seat_status, cinema_no, hall_id, 
+      hall_name, source, show_time, 
+      created_time, modified_time)
+    values (#{id,jdbcType=INTEGER}, #{scheduleId,jdbcType=INTEGER}, #{seat,jdbcType=VARCHAR}, 
+      #{seatStatus,jdbcType=TINYINT}, #{cinemaNo,jdbcType=INTEGER}, #{hallId,jdbcType=VARCHAR}, 
+      #{hallName,jdbcType=VARCHAR}, #{source,jdbcType=TINYINT}, #{showTime,jdbcType=TIMESTAMP}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateSelective" parameterType="com.wepiao.goods.model.goods.SeatPurchaseTask" >
+    update seat_purchase_task
+    <set >
+      <if test="scheduleId != null" >
+        schedule_id = #{scheduleId,jdbcType=INTEGER},
+      </if>
+      <if test="seat != null" >
+        seat = #{seat,jdbcType=VARCHAR},
+      </if>
+      <if test="seatStatus != null" >
+        seat_status = #{seatStatus,jdbcType=TINYINT},
+      </if>
+      <if test="cinemaNo != null" >
+        cinema_no = #{cinemaNo,jdbcType=INTEGER},
+      </if>
+      <if test="hallId != null" >
+        hall_id = #{hallId,jdbcType=VARCHAR},
+      </if>
+      <if test="hallName != null" >
+        hall_name = #{hallName,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="showTime != null" >
+        show_time = #{showTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,95 @@
+﻿[
+  {
+    "bisId": "545893212bc3abad3154fcb0",
+    "bisServerNo": "54604a3faf2b983fbbbd6a5h",
+    "bisPlatType": "CMTS",
+    "expand": {
+      "root_url": "http://ticket.mvtapi.com:8500/ticketapi/services/ticketapi?wsdl",
+      "app_code": "TEST",
+      "key": "12345678",
+      "interval": "2",
+      "token_id": "1829",
+      "token": "abcdef",
+      "handle_fee": "3",
+      "pay_type": "0",
+      "TimeOut": "60",
+      "piece": "01"
+    },
+    "defaultCode": {
+      "0": "succ"
+    }
+  },
+  {
+    "bisId": "545893212bc3abad3154fcc5",
+    "bisServerNo": "54604a3faf2b983fbbbd6a5o",
+    "bisPlatType": "VISTAV1",
+    "expand": {
+      "root_url_data": "http://180.167.19.17/WSVistaWebClient/dataservice.asmx?wsdl",
+      "root_url_ticket": "http://180.167.19.17/WSVistaWebClient/TicketingService.asmx?wsdl",
+      "root_url": "http://180.167.19.17/WSVistaWebClient/RESTData.svc",
+      "ticket_type": "微影",
+      "TimeOut": "60",
+      "piece": "01",
+      "interval": "30",
+      "client_cla": "RSP",
+      "client_id": "120.0.170.1",
+      "client_name": "WX",
+      "password": "93D03506-58BB-4490-8DF4-698A-0BA94392"
+    },
+    "defaultCode": {
+      "OK": "succ"
+    }
+  },
+  {
+    "bisId": "545893212bc3abad3154fcb3",
+    "bisServerNo": "54604a3faf2b983fbbbd6a5i",
+    "bisPlatType": "DINGXIN",
+    "expand": {
+      "root_url": "http://api.platform.yinghezhong.com/",
+      "app_code": "10089",
+      "auth_code": "wlkj02djlk29=",
+      "TimeOut": "60",
+      "interval": "30",
+      "handle_fee": "0",
+      "piece": "01"
+    },
+    "defaultCode": {
+      "1": "succ"
+    }
+  },
+  {
+    "bisId": "545893212bc3abad3154fcbc",
+    "bisServerNo": "54604a3faf2b983fbbbd6a5l",
+    "bisPlatType": "DADIV2",
+    "expand": {
+      "root_url": "http://123.57.42.230:8080/apiportal/thirdparty/",
+      "app_code": "dadiUAT",
+      "app_key": "123456",
+      "md5code": "dhcpyybdkqvmsobhlrcbggjbdorcktgm",
+      "userTypeId": "01",
+      "TimeOut": "60",
+      "piece": "01",
+      "interval": "20"
+    },
+    "defaultCode": {
+      "0": "succ"
+    }
+  },
+  {
+    "bisId": "545893212bc3abad3154fcb6",
+    "bisServerNo": "54604a3faf2b983fbbbd6a5j",
+    "bisPlatType": "WANDAV2",
+    "expand": {
+      "interfaceUrl": "http://60.10.8.240:8080/filmserver/thirdparty",
+      "cityIdForFilmType2": "8022251040",
+      "clientId": "WDWXDYP",
+      "ticketId": "网购票",
+      "actionTicketId": "",
+      "md5Code": "idjs@Sf33rf3ddzneckjvij83uf3f3f3",
+      "key": "LMOEW9!@SFE88Jus",
+      "piece": "01",
+      "TimeOut": "10",
+      "interval": "30"
+    }
+  }
+]

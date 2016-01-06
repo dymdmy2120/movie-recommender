@@ -1,0 +1,111 @@
+{
+  "$globe": {
+    "id": "_id"
+  },
+  "BizOrderInfo": {
+    "bisRoomName": "BISRoomName",
+    "bisRoomNo": "BISRoomNo",
+    "bisScheduleId": "BISScheduleId",
+    "tpOrderId": "TPOrderId",
+    "tpExtOrderId": "TPExtOrderId",
+    "bisCode": "BISCode",
+    "bisExtCode": "BISExtCode",
+    "bisSystemId": "BISSystemId",
+    "bisServerId": "BISServerId"
+  },
+  "BizOrderInfoTmp": {
+    "bisRoomName": "BISRoomName",
+    "bisRoomNo": "BISRoomNo",
+    "bisScheduleId": "BISScheduleId",
+    "tpOrderId": "TPOrderId",
+    "tpExtOrderId": "TPExtOrderId",
+    "bisCode": "BISCode",
+    "bisExtCode": "BISExtCode",
+    "bisSystemId": "BISSystemId",
+    "bisServerId": "BISServerId"
+
+  },
+  "BizOrderDetail": {
+    "tpOrderId": "TPOrderId",
+    "tpExtOrderId": "TPExtOrderId",
+    "bisCode": "BISCode",
+    "bisExtCode": "BISExtCode",
+    "bisSystemId": "BISSystemId",
+    "bisServerId": "BISServerId"
+  },
+  "BizOrderDetailTmp": {
+    "tpOrderId": "TPOrderId",
+    "tpExtOrderId": "TPExtOrderId",
+    "bisCode": "BISCode",
+    "bisExtCode": "BISExtCode",
+    "bisSystemId": "BISSystemId",
+    "bisServerId": "BISServerId"
+  },
+  "BaseCinema": {
+    "cityId": "CityID"
+  },
+  "TSMovieSchedulePricing": {
+    "bisId": "BISId",
+    "bisServerId": "BISServerId",
+    "bisMovieScheduleId": "BISMovieScheduleId",
+    "bisCinemaId": "BISCinemaId",
+    "bisCinemaNo": "BISCinemaNo",
+    "bisMovieNo": "BISMovieNo",
+    "bisMovieId": "BISMovieId",
+    "bisCinemaPrice": "BISCinemaPrice",
+    "bisSalePrice": "BISSalePrice",
+    "bisGuidePrice": "BISGuidePrice",
+    "bisSettlementPrice": "BISSettlementPrice",
+    "bisLowestPrice": "BISLowestPrice"
+  },
+  "TSMovieSchedulePricingRecord": {
+    "bisId": "BISId",
+    "bisServerId": "BISServerId",
+    "bisMovieScheduleId": "BISMovieScheduleId",
+    "bisCinemaId": "BISCinemaId",
+    "bisCinemaNo": "BISCinemaNo",
+    "bisMovieId": "BISMovieId",
+    "bisMovieNo": "BISMovieNo",
+    "bisCinemaPrice": "BISCinemaPrice",
+    "bisSalePrice": "BISSalePrice",
+    "bisGuidePrice": "BISGuidePrice",
+    "bisSettlementPrice": "BISSettlementPrice",
+    "bisLowestPrice": "BISLowestPrice",
+    "tsBisPriceId": "TSBISPriceId",
+    "tpId": "TPId"
+  },
+  "BizRefundInfo": {
+    "bisRoomNo": "BISRoomNo",
+    "bisRoomName": "BISRoomName"
+  },
+  "BisMovie": {
+    "bisId": "BISId",
+    "bisServerId": "BISServerId",
+    "baseBisMappingId": "BaseBISMappingId"
+  },
+  "BisCinema": {
+    "bisId": "BISId",
+    "bisServerId": "BISServerId",
+    "cinemaHalls": "Hall",
+    "baseBisMappingId": "BaseBISMappingId",
+    "bisServerName": "BISServerName",
+    "isExtendQrCode": "IsExtendQRCode",
+    "isExtendQrCodeDisplay": "IsExtendQRCodeDisplay",
+    "qrCodeType": "QRCodeType",
+    "qrCodeTypeDisplay": "QRCodeTypeDisplay"
+  },
+  "BisMovieSchedule": {
+    "bisId": "BISId",
+    "bisCinemaId": "BISCinemaId",
+    "bisCinemaNo": "BISCinemaNo",
+    "bisServerId": "BISServerId",
+    "bisMovieNo": "BISMovieNo",
+    "bisMovieId": "BISMovieId",
+    "creatorId": "CreatorID",
+    "editerId": "EditerID"
+  },
+  "BizProductPackage": {
+    "qqGid": "QQgid",
+    "smsTips": "SMSTips"
+  }
+}

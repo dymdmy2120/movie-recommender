@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wepiao.goods.mapper.goods.BisOrderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wepiao.goods.model.goods.BisOrderInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="fix_order_id" property="fixOrderId" jdbcType="VARCHAR" />
+    <result column="schedule_id" property="scheduleId" jdbcType="INTEGER" />
+    <result column="cinema_no" property="cinemaNo" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="seat" property="seat" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="TINYINT" />
+    <result column="seat_status" property="seatStatus" jdbcType="TINYINT" />
+    <result column="tp_order_id" property="tpOrderId" jdbcType="VARCHAR" />
+    <result column="tp_ext_order_id" property="tpExtOrderId" jdbcType="VARCHAR" />
+    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="price_record_id" property="priceRecordId" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="TINYINT" />
+    <result column="show_time" property="showTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fix_order_id, schedule_id, cinema_no, channel_id, seat, num, seat_status, tp_order_id, 
+    tp_ext_order_id, ticket_code, price_record_id, source, show_time, created_time, modified_time
+  </sql>
+  <select id="getById" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from bis_order_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="getByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from bis_order_info
+    where fix_order_id = #{fixOrderId,jdbcType=VARCHAR}
+  </select>
+  
+  <insert id="insert" parameterType="com.wepiao.goods.model.goods.BisOrderInfo" >
+    insert into bis_order_info (id, fix_order_id, schedule_id, 
+      cinema_no, channel_id, seat, 
+      num, seat_status, tp_order_id, 
+      tp_ext_order_id, ticket_code, price_record_id, 
+      source, show_time, created_time, 
+      modified_time)
+    values (#{id,jdbcType=INTEGER}, #{fixOrderId,jdbcType=VARCHAR}, #{scheduleId,jdbcType=INTEGER}, 
+      #{cinemaNo,jdbcType=INTEGER}, #{channelId,jdbcType=INTEGER}, #{seat,jdbcType=VARCHAR}, 
+      #{num,jdbcType=TINYINT}, #{seatStatus,jdbcType=TINYINT}, #{tpOrderId,jdbcType=VARCHAR}, 
+      #{tpExtOrderId,jdbcType=VARCHAR}, #{ticketCode,jdbcType=VARCHAR}, #{priceRecordId,jdbcType=INTEGER}, 
+      #{source,jdbcType=TINYINT}, #{showTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{modifiedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateSelective" parameterType="com.wepiao.goods.model.goods.BisOrderInfo" >
+    update bis_order_info
+    <set >
+      <if test="fixOrderId != null" >
+        fix_order_id = #{fixOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleId != null" >
+        schedule_id = #{scheduleId,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaNo != null" >
+        cinema_no = #{cinemaNo,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="seat != null" >
+        seat = #{seat,jdbcType=VARCHAR},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=TINYINT},
+      </if>
+      <if test="seatStatus != null" >
+        seat_status = #{seatStatus,jdbcType=TINYINT},
+      </if>
+      <if test="tpOrderId != null" >
+        tp_order_id = #{tpOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="tpExtOrderId != null" >
+        tp_ext_order_id = #{tpExtOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="priceRecordId != null" >
+        price_record_id = #{priceRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="showTime != null" >
+        show_time = #{showTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <!--根据用户订单号更新与接入商交互表中对应的座位状态-->
+  <update id="updateRefundCommonSeatByFixOrderId">
+    UPDATE
+    bis_order_info
+    SET
+     seat_status = #{seatStatus,jdbcType=TINYINT}
+    WHERE
+    fix_order_id = #{fixOrderId,jdbcType=VARCHAR}
+  </update>
+</mapper>

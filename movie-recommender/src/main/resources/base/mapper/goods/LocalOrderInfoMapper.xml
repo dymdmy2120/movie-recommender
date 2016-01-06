@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wepiao.goods.mapper.goods.LocalOrderInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.wepiao.goods.model.goods.LocalOrderInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="fix_order_id" property="fixOrderId" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="schedule_id" property="scheduleId" jdbcType="INTEGER" />
+    <result column="cinema_no" property="cinemaNo" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="seat" property="seat" jdbcType="VARCHAR" />
+    <result column="local_seat_status" property="localSeatStatus" jdbcType="TINYINT" />
+    <result column="tp_order_id" property="tpOrderId" jdbcType="VARCHAR" />
+    <result column="tp_ext_order_id" property="tpExtOrderId" jdbcType="VARCHAR" />
+    <result column="ticket_code" property="ticketCode" jdbcType="VARCHAR" />
+    <result column="price_record_id" property="priceRecordId" jdbcType="INTEGER" />
+    <result column="source" property="source" jdbcType="TINYINT" />
+    <result column="lock_timeout" property="lockTimeout" jdbcType="INTEGER" />
+    <result column="lock_time" property="lockTime" jdbcType="TIMESTAMP" />
+    <result column="show_time" property="showTime" jdbcType="TIMESTAMP" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="modified_time" property="modifiedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, fix_order_id, order_id, schedule_id, cinema_no, channel_id, seat, local_seat_status, 
+    tp_order_id, tp_ext_order_id, ticket_code, price_record_id, source, lock_timeout, 
+    lock_time, show_time, created_time, modified_time
+  </sql>
+ <select id="getByOrderId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from local_order_info
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+  <select id="getByCriteria" resultMap="BaseResultMap"
+      parameterType="com.wepiao.goods.model.goods.LocalOrderInfo">
+    select
+    <include refid="Base_Column_List"/>
+    from local_order_info
+    <where>
+      <if test="scheduleId != null">
+        schedule_id = #{scheduleId,jdbcType=INTEGER}
+      </if>
+      <if test="seat != null">
+        and seat = #{seat,jdbcType=VARCHAR}
+      </if>
+      <if test="localSeatStatus != null">
+        and local_seat_status = #{localSeatStatus,jdbcType=TINYINT}
+      </if>
+    </where>
+  </select>
+
+  <!--获得锁座超时的所有座位-->
+  <select id="getOvertimeOrders" resultMap="BaseResultMap">
+      select
+      fix_order_id
+      from local_order_info
+	  where 
+	  TIMESTAMPDIFF(MINUTE, `lock_time`, CURRENT_TIMESTAMP()) > lock_timeout
+  </select>  
+  <insert id="insert" parameterType="com.wepiao.goods.model.goods.LocalOrderInfo" >
+    insert into local_order_info (id, fix_order_id, order_id, 
+      schedule_id, cinema_no, channel_id, 
+      seat, local_seat_status, tp_order_id, 
+      tp_ext_order_id, ticket_code, price_record_id, 
+      source, lock_timeout, lock_time, 
+      show_time, created_time, modified_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{fixOrderId,jdbcType=VARCHAR}, #{orderId,jdbcType=VARCHAR}, 
+      #{scheduleId,jdbcType=INTEGER}, #{cinemaNo,jdbcType=INTEGER}, #{channelId,jdbcType=INTEGER}, 
+      #{seat,jdbcType=VARCHAR}, #{localSeatStatus,jdbcType=TINYINT}, #{tpOrderId,jdbcType=VARCHAR}, 
+      #{tpExtOrderId,jdbcType=VARCHAR}, #{ticketCode,jdbcType=VARCHAR}, #{priceRecordId,jdbcType=INTEGER}, 
+      #{source,jdbcType=TINYINT}, #{lockTimeout,jdbcType=INTEGER}, #{lockTime,jdbcType=TIMESTAMP}, 
+      #{showTime,jdbcType=TIMESTAMP}, #{createdTime,jdbcType=TIMESTAMP}, #{modifiedTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <update id="updateSelective" parameterType="com.wepiao.goods.model.goods.LocalOrderInfo">
+    update local_order_info
+    <set >
+      <if test="fixOrderId != null" >
+        fix_order_id = #{fixOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="orderId != null" >
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduleId != null" >
+        schedule_id = #{scheduleId,jdbcType=INTEGER},
+      </if>
+      <if test="cinemaNo != null" >
+        cinema_no = #{cinemaNo,jdbcType=INTEGER},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=INTEGER},
+      </if>
+      <if test="seat != null" >
+        seat = #{seat,jdbcType=VARCHAR},
+      </if>
+      <if test="localSeatStatus != null" >
+        local_seat_status = #{localSeatStatus,jdbcType=TINYINT},
+      </if>
+      <if test="tpOrderId != null" >
+        tp_order_id = #{tpOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="tpExtOrderId != null" >
+        tp_ext_order_id = #{tpExtOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="ticketCode != null" >
+        ticket_code = #{ticketCode,jdbcType=VARCHAR},
+      </if>
+      <if test="priceRecordId != null" >
+        price_record_id = #{priceRecordId,jdbcType=INTEGER},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=TINYINT},
+      </if>
+      <if test="lockTimeout != null" >
+        lock_timeout = #{lockTimeout,jdbcType=INTEGER},
+      </if>
+      <if test="lockTime != null" >
+        lock_time = #{lockTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="showTime != null" >
+        show_time = #{showTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedTime != null" >
+        modified_time = #{modifiedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!--解锁超时订单-->
+  <update id="unlockLocalSeat" parameterType="String" >
+    update local_order_info
+    set local_seat_status = #{localSeatStatus,jdbcType=TINYINT},
+    where fix_order_id = #{orderId,jdbcType=INTEGER}
+  </update>  
+  <!-- 批量更新 -->
+    <update id="updateLocalOrderInfoBatch" parameterType="java.util.List">
+    <foreach collection="list" item="item" index="index" open="" close="" separator=";">
+      update local_order_info
+      <set>
+        <if test="item.localSeatStatus != null">
+          local_seat_status = #{item.localSeatStatus,jdbcType=TINYINT},
+        </if>
+      </set>
+      where id = #{item.id,jdbcType=INTEGER}
+    </foreach>
+  
+  </update>
+   <!-- 出票 -->
+  <update id="drawTickets">
+  update local_order_info set local_seat_status = 2 where id in (
+  <foreach collection="ids" item="item" separator=",">
+  #{item}
+  </foreach>)
+   and local_seat_status = 1
+
+  </update>
+  
+  <select id="getSeatsBySchedule" parameterType="INTEGER" resultType="String">
+    SELECT
+    t.seat
+    FROM
+    local_order_info t
+    WHERE
+    t.schedule_id = #{scheduleId}
+    AND t.local_seat_status = 0
+  </select>
+
+  <!--查询本地所有待退票座位信息-->
+  <select id="selectAllRefundTickets" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM
+    local_order_info
+    WHERE
+    NOW() = DATE_SUB(t.show_time, INTERVAL 2 HOUR)
+    AND local_seat_status = 0
+  </select>
+
+  <!--根据订单号查询座位-->
+  <select id="selectLocalSeatsByOrderId" parameterType="String" resultMap="BaseResultMap">
+    SELECT
+      <include refid="Base_Column_List" />
+    FROM
+    local_order_info
+    WHERE
+    order_id = #{orderId,jdbcType=VARCHAR}
+    AND local_seat_status = 2
+  </select>
+
+  <!--删除自有库存中退票成功的票-->
+  <delete id="deleteLocalRefundOkTickets"
+        parameterType="com.wepiao.goods.model.goods.LocalOrderInfo">
+    DELETE
+    FROM
+    local_order_info t
+    WHERE
+    t.order_id = #{orderId,jdbcType=VARCHAR}
+    AND t.seat = #{seat,jdbcType=VARCHAR}
+    AND t.schedule_id = #{scheduleId,jdbcType=INTEGER}
+  </delete>
+
+  <update id="lockSeats">
+    update local_order_info set local_seat_status = 1,order_id = #{orderId},lock_time =CURRENT_TIMESTAMP
+    where id in(
+    <foreach collection="ids" item="item" separator=",">
+      #{item}
+    </foreach>
+    )
+    and local_seat_status = 0
+  </update>
+</mapper>

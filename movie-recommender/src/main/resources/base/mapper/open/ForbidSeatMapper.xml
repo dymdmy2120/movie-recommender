@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.wepiao.goods.mapper.open.ForbidSeatMapper">
+  <resultMap id="BaseResultMap" type="com.wepiao.goods.model.open.ForbidSeat">
+    <id column="Id" property="id" jdbcType="VARCHAR"/>
+    <result column="BaseCinemaNo" property="baseCinemaNo" jdbcType="VARCHAR"/>
+    <result column="BaseCinemaId" property="baseCinemaId" jdbcType="VARCHAR"/>
+    <result column="BaseCinemaName" property="baseCinemaName" jdbcType="VARCHAR"/>
+    <result column="ForbidType" property="forbidType" jdbcType="INTEGER"/>
+    <result column="BeginTime" property="beginTime" jdbcType="TIMESTAMP"/>
+    <result column="EndTime" property="endTime" jdbcType="TIMESTAMP"/>
+    <result column="HallNo" property="hallNo" jdbcType="VARCHAR"/>
+    <result column="HallName" property="hallName" jdbcType="VARCHAR"/>
+    <result column="SeatJson" property="seat" jdbcType="VARCHAR"/>
+    <result column="Status" property="status" jdbcType="INTEGER"/>
+    <result column="CreatorID" property="createId" jdbcType="VARCHAR"/>
+    <result column="CreateTime" property="creatTime" jdbcType="TIMESTAMP"/>
+    <result column="EditerID" property="editerId" jdbcType="VARCHAR"/>
+    <result column="EditTime" property="editTime" jdbcType="TIMESTAMP"/>
+    <result column="ChannelId" property="channelId" jdbcType="VARCHAR"/>
+    <result column="ChannelName" property="channelName" jdbcType="VARCHAR"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    Id, BaseCinemaNo, BaseCinemaId, BaseCinemaName,ForbidType,BeginTime,
+    EndTime,HallNo,HallName,SeatJson,Status,CreatorID,CreateTime,EditerID,
+    EditTime,ChannelId,ChannelName
+  </sql>
+  <!-- 查询禁售座位信息 -->
+  <select id="getForbidSeat" parameterType="Map" resultType="String">
+    SELECT
+    t.SeatJson
+    FROM
+    open_base_cinema_hall_forbid t
+    WHERE
+    t.BaseCinemaNo = #{baseCinemaNo,jdbcType=VARCHAR}
+    AND t.BeginTime <![CDATA[<=]]>
+    #{showTime,jdbcType=TIMESTAMP}
+    AND t.EndTime <![CDATA[>=]]>
+    #{showTime,jdbcType=TIMESTAMP}
+    AND t.ForbidType = 1
+    AND t.STATUS = 1
+  </select>
+</mapper>
