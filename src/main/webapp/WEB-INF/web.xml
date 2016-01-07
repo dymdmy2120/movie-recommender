@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
@@ -50,3 +51,12 @@
     <session-timeout>20</session-timeout>
   </session-config>
 </web-app>
+=======
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+</web-app>
+>>>>>>> e96e913e5a113d30ea078bb1e4572918313c047e

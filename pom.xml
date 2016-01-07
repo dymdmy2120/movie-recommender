@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -17,10 +18,22 @@
     <jedis.version>2.7.2</jedis.version>
     <jersey.version>1.19</jersey.version>
   </properties>
+=======
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.movie.rec</groupId>
+  <artifactId>movie-recommender</artifactId>
+  <packaging>war</packaging>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>movie-recommender Maven Webapp</name>
+  <url>http://maven.apache.org</url>
+>>>>>>> e96e913e5a113d30ea078bb1e4572918313c047e
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+<<<<<<< HEAD
       <version>${junit.version}</version>
     </dependency>
     <!-- spring jars -->
@@ -398,5 +411,13 @@
         <directory>src/main/resources/${environment}</directory>
       </resource>
     </resources>
+=======
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <finalName>movie-recommender</finalName>
+>>>>>>> e96e913e5a113d30ea078bb1e4572918313c047e
   </build>
 </project>
