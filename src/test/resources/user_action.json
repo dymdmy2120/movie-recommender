@@ -1,0 +1,4 @@
+[{"action":"search_movie","proportion":"1"},
+{"action":"browse_movie","proportion":"1"},
+{"action":"attention_movie","proportion":"1"},
+{"action":"comment_movie","proportion":"1"}]
