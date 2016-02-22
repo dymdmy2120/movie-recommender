@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-<<<<<<< HEAD
-Build-Jdk: 1.7.0_79
-=======
-Build-Jdk: 1.6.0_45
->>>>>>> dbe7fa4... first commit
-Built-By: dynamo
-Created-By: Maven Integration for Eclipse
-
