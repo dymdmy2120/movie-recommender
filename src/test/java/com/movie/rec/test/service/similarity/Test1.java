@@ -1,4 +1,4 @@
-package com.movie.rec.test.service;
+package com.movie.rec.test.service.similarity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
+import com.movie.rec.test.service.BaseTest;
 import com.wx.movie.rec.common.enums.Constant;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.common.util.JsonMapperUtil;

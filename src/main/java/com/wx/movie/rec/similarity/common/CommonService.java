@@ -32,15 +32,16 @@ public class CommonService {
   Set<String> uidOrMovNoSets = actionMap.keySet();
   List<String> uidOrMoVNoLists = new ArrayList<String>(uidOrMovNoSets);
   int size = uidOrMoVNoLists.size();
-  Map<String,Double> similarityMap = Maps.newHashMap();
   
   for(int i=0; i<size-1; i++){
+    Map<String,Double> similarityMap = Maps.newHashMap();
     String movieNo = uidOrMoVNoLists.get(i);
     Set<String> uIds1 = actionMap.get(movieNo);
     int uIds1Size = uIds1.size();
-    
     for(int k=i+1; k<size; k++){
+ 
       String movieNo1 = uidOrMoVNoLists.get(k);
+     
       Set<String> uIds2 = actionMap.get(movieNo1);
       int intersection = intersection(uIds1,uIds2);
      double similarityValue =  computeSimilarity(intersection,uIds1Size,uIds2.size());

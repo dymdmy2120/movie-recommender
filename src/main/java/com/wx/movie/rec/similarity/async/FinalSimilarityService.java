@@ -25,6 +25,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.sun.tools.classfile.StackMapTable_attribute.full_frame;
 import com.wx.movie.rec.common.enums.Constant;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.common.exception.DataException;
@@ -66,7 +67,7 @@ public class FinalSimilarityService implements InitializingBean {
         Stopwatch timer = Stopwatch.createStarted();
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity = getFinalSimilarity(Constant.BSE_USE);
-        writeBseUserToFile(finalSimilarity);
+        //writeDataToFile(finalSimilarity,"/home/dynamo/bseUser.txt");
         // 调用生成推荐列表模块
         // 计算完后将标志位置为0
         redisUtils.setInt(rtKey, 0);
@@ -92,7 +93,7 @@ public class FinalSimilarityService implements InitializingBean {
         Stopwatch timer = Stopwatch.createStarted();
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity =  getFinalSimilarity(Constant.BSE_MOVIE);
-        writeBseMovieToFile(finalSimilarity);
+        //writeDataToFile(finalSimilarity,"/home/dynamo/bseMovie.txt");
         // 调用生成推荐列表模块
         // 计算完后将标志位置为0
         redisUtils.setInt(rtKey, 0);
@@ -169,9 +170,7 @@ public class FinalSimilarityService implements InitializingBean {
       }
       finalSimarityMap.put(key,tempSimilarityMap);
     }
-    System.out.println("equvialSimilarityMap == "+equvialSimilarityMap.size());
     mergeSimilarityMap(finalSimarityMap,equvialSimilarityMap);
-    System.out.println("finalSimilarityMap == "+finalSimarityMap.size());
     logger.info("GetFinalSimilarity take time is {} ", timer.stop());
     return finalSimarityMap;
   }
@@ -204,7 +203,6 @@ public class FinalSimilarityService implements InitializingBean {
    Stopwatch timer = Stopwatch.createStarted();
    for(Map.Entry<String, Map<String, Double>> entry : equivalMap.entrySet()){
      String key = entry.getKey();
-     System.out.println("key"+key+" "+finalMap.containsKey(key));
      if(finalMap.containsKey(key)){
        Map<String, Double> similarityMap = finalMap.get(key);
        similarityMap.putAll(entry.getValue());
@@ -213,7 +211,6 @@ public class FinalSimilarityService implements InitializingBean {
        finalMap.put(entry.getKey(),entry.getValue());
      }
    }
-   System.out.println("finalMap"+finalMap.size());
    logger.info("mergeSimilarityMap take time is {}", timer.stop());
  }
   private Map<UserActionProportion, Map<String, Map<String, Double>>> getSimilarityMapLists(String method) {
@@ -280,48 +277,22 @@ public class FinalSimilarityService implements InitializingBean {
       if (similarityMap == null) {
         continue;
       }
-      if("60001721".equals(key) && "60001721".equals(subKey)){
-        throw new RuntimeException("60001721");
-      }
+   
       Double similarityValue = similarityMap.get(subKey);
       if (similarityValue == null) {
         continue;
       }
       totalSimilarity = totalSimilarity + similarityValue * usreActionPro.getProportion();
     }
-    logger.info(
-        "ComputeFinalSimilarity take time is {}, key is {} subKey is {} totalSimilarity is {}",
+    logger.info("ComputeFinalSimilarity take time is {}, key is {} subKey is {} totalSimilarity is {}",
         timer.stop(), key, subKey, totalSimilarity);
     return totalSimilarity;
   }
   
-  private void writeBseUserToFile(Map<String, Map<String, Double>> map) {
-    BufferedWriter bw  = null;
-    try{
-    String path = "/home/dynamo/bseUser.txt";
-    FileOutputStream fos = new FileOutputStream(path);
-     bw= new BufferedWriter(new OutputStreamWriter(fos));
-    for(Map.Entry<String, Map<String,Double>> entry : map.entrySet()){
-      bw.write(entry.getKey());
-      bw.write(JsonMapperUtil.getInstance().toJson(entry.getValue()));
-    }
-    }catch(Exception e){
-      throw new DataException(e);
-    }finally{
-      if(bw != null){
-        try {
-          bw.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-  }
   
-  private void writeBseMovieToFile(Map<String, Map<String, Double>> map){
+/*  private void writeDataToFile(Map<String, Map<String, Double>> map,String path){
     BufferedWriter bw = null;
     try{
-    String path = "/home/dynamo/bseMovie.txt";
     OutputStream fos = new FileOutputStream(path);
     bw = new BufferedWriter(new OutputStreamWriter(fos));
     for(Map.Entry<String, Map<String,Double>> entry : map.entrySet()){
@@ -339,5 +310,5 @@ public class FinalSimilarityService implements InitializingBean {
       }
     }
   }
-  }
+  }*/
 }

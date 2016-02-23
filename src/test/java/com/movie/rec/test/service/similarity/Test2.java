@@ -1,4 +1,4 @@
-package com.movie.rec.test.service;
+package com.movie.rec.test.service.similarity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
