@@ -34,7 +34,7 @@ public class CommonService {
   int size = uidOrMoVNoLists.size();
   Map<String,Double> similarityMap = Maps.newHashMap();
   
-  for(int i=0; i<size; i++){
+  for(int i=0; i<size-1; i++){
     String movieNo = uidOrMoVNoLists.get(i);
     Set<String> uIds1 = actionMap.get(movieNo);
     int uIds1Size = uIds1.size();

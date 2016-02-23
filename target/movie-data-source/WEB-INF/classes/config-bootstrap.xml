@@ -9,7 +9,7 @@
 
   <context:annotation-config/>
   <!-- 设置使用注解类所在的jar包 -->
-  <context:component-scan base-package="com.wx.movie.data"/>
+  <context:component-scan base-package="com.wx.movie.rec"/>
 <!--
 	<bean id="goodsVoucherExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
 	    <property name="corePoolSize" value="3" />

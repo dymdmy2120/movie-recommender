@@ -8,9 +8,13 @@
 		<param-value>classpath*:/config-bootstrap.xml</param-value>
 	</context-param>
 
-	<listener>
+<!-- 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
+	</listener> -->
+	<!-- 监听器，一启动tomcat，开启两个线程进行计算最终相似度 -->
+	<listener>
+        <listener-class>com.wx.movie.rec.common.listener.StartMonitor</listener-class>
+</listener>
 
 	<filter>
 		<filter-name>encodingFilter</filter-name>
@@ -48,4 +52,5 @@
 	<session-config>
 		<session-timeout>20</session-timeout>
 	</session-config>
+
 </web-app>

@@ -1,5 +1,6 @@
 package com.movie.rec.test.service;
 
+import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -18,8 +19,16 @@ public class FinalSimilarityServiceTest extends BaseTest{
   @Autowired
   private FinalSimilarityService finalSimilarityService;
   
-   @Test
+/*   @Test
   public void testGetSimilarityMapLists(){
     Map<UserActionProportion, Map<String, Map<String, Double>>> map =  finalSimilarityService.getSimilarityMapLists(Constant.BSE_MOVIE);
+    for(Map.Entry<UserActionProportion, Map<String, Map<String, Double>>> entry : map.entrySet()){
+      System.out.println(entry.getKey().getAction()+"  === "+entry.getValue().size());
+    }
   }
+  //@Test
+  public void testGetMaxScope(){
+    List<Object> list = finalSimilarityService.getMaxScope(Constant.BSE_MOVIE);
+    System.out.println(((UserActionProportion)list.get(0)).getAction());
+  }*/
 }

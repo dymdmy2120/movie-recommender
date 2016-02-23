@@ -17,8 +17,7 @@
     	
     <task:executor id="mqConnExecutor" pool-size="5-10" queue-capacity="500" />
 		
-    <bean id="simpleMessageConverter" class="org.springframework.amqp.support.converter.SimpleMessageConverter"/>
-	
+	<bean id="jsonMessageConverter" class="org.springframework.amqp.support.converter.Jackson2JsonMessageConverter"/>
 	<bean id="rcf" class="com.rabbitmq.client.ConnectionFactory">
         <property name="automaticRecoveryEnabled" value="true" />
         <property name="topologyRecoveryEnabled" value="true" />

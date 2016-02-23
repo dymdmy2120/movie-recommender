@@ -13,22 +13,12 @@ import com.wx.movie.rec.similarity.pojo.UserActionProportion;
  */
 public class Test2 {
 public static void main(String[] args) {
-  UserActionProportion userAction1 = new UserActionProportion();
-  UserActionProportion userAction2 = new UserActionProportion();
-  userAction1.setAction("4");
-  userAction2.setAction("3");
-  
-  Map map1 = new HashMap();
-  Map map2 =  new HashMap();
-  map1.put(userAction1, "f");
-  map2.put(userAction2, "d");
-  List list = new ArrayList();
-  list.add(map1);
-  list.add(map2);
-  Map map3 = new HashMap();
-  UserActionProportion userAction3 = new UserActionProportion();
-  userAction3.setAction("4");
-  map1.remove(userAction3);
-  System.out.println(map1);
+try{
+  int i = 1/0;
+}catch(Exception e){
+  e.printStackTrace();
+}finally{
+  System.out.println(22);
+}
 }
 }
