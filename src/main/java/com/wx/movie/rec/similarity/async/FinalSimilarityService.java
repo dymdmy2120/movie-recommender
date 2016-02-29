@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -25,17 +26,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.sun.tools.classfile.StackMapTable_attribute.full_frame;
 import com.wx.movie.rec.common.enums.Constant;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.common.exception.DataException;
 import com.wx.movie.rec.common.util.JsonMapperUtil;
+import com.wx.movie.rec.recommendlist.service.ProRecListSerivce;
 import com.wx.movie.rec.redis.RedisUtils;
 import com.wx.movie.rec.similarity.pojo.UserActionProportion;
 
 /**
  * 得到基于用户或基于影片的最终的相似度 Date: 2016年2月18日 下午1:06:09 <br/>
- * 
+ *
  * @author dynamo
  */
 @Service("finalSimilarityService")
@@ -45,15 +46,20 @@ public class FinalSimilarityService implements InitializingBean {
 
   @Value("${user.action.json}")
   private String userActionJson;
+  @Autowired
+  @Qualifier("bseUsrRecList")
+  private ProRecListSerivce bseUsrProRecListService;
+  @Autowired
+  @Qualifier("bseMovieRecList")
+  private ProRecListSerivce bseMovieProRecListService;
 
   private List<UserActionProportion> userActionProportions;
   private TypeReference<List<UserActionProportion>> tr;
   private TypeReference<Map<String,Double>> tr1;
   private Logger logger = LoggerFactory.getLogger(FinalSimilarityService.class);
-
   /**
    * 基于用户的最终相似度
-   * 
+   *
    * @author dynamo
    */
   @Async("computeFinalSimilarityExecutor")
@@ -67,8 +73,9 @@ public class FinalSimilarityService implements InitializingBean {
         Stopwatch timer = Stopwatch.createStarted();
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity = getFinalSimilarity(Constant.BSE_USE);
-        //writeDataToFile(finalSimilarity,"/home/dynamo/bseUser.txt");
+        // writeDataToFile(finalSimilarity,"/home/dynamo/bseUser.txt");
         // 调用生成推荐列表模块
+        bseUsrProRecListService.productRecList(finalSimilarity);
         // 计算完后将标志位置为0
         redisUtils.setInt(rtKey, 0);
         logger.info("BseUsrFinalSimilarity Base on User take time is {}", timer.stop());
@@ -78,7 +85,7 @@ public class FinalSimilarityService implements InitializingBean {
 
   /**
    * 基于影片的最终相似度
-   * 
+   *
    * @author dynamo
    */
   @Async("computeFinalSimilarityExecutor")
@@ -93,8 +100,9 @@ public class FinalSimilarityService implements InitializingBean {
         Stopwatch timer = Stopwatch.createStarted();
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity =  getFinalSimilarity(Constant.BSE_MOVIE);
-        //writeDataToFile(finalSimilarity,"/home/dynamo/bseMovie.txt");
+        // writeDataToFile(finalSimilarity,"/home/dynamo/bseMovie.txt");
         // 调用生成推荐列表模块
+        bseMovieProRecListService.productRecList(finalSimilarity);
         // 计算完后将标志位置为0
         redisUtils.setInt(rtKey, 0);
         logger.info("BseUsrFinalSimilarity Base on Movie take time is {}", timer.stop());
@@ -130,7 +138,9 @@ public class FinalSimilarityService implements InitializingBean {
     } catch (Exception e) {
       logger.error("parse user_action.json fail", e);
     } finally {
-      if (fis != null) fis.close();
+      if (fis != null) {
+        fis.close();
+      }
     }
   }
 
@@ -142,6 +152,12 @@ public class FinalSimilarityService implements InitializingBean {
   }
 
   @SuppressWarnings("unchecked")
+  /**
+   *
+   * @author dynamo
+   * @param method
+   * @return 最终的相似度  U1 <U2,0.01> <U3,0.002> 或者M1 <M2,0.01> <M3,0.002>
+   */
   private Map<String, Map<String, Double>> getFinalSimilarity(String method) {
     Stopwatch timer = Stopwatch.createStarted();
     // 最终相似度映射
@@ -175,7 +191,7 @@ public class FinalSimilarityService implements InitializingBean {
     return finalSimarityMap;
   }
   /**
-   * 由于遍历特征向量时，只得到 u1  和 u2 u3的相似度，但是 u1 和 u2相似度和 u2 u1相等， u1 u3等价与 u3 u1 
+   * 由于遍历特征向量时，只得到 u1  和 u2 u3的相似度，但是 u1 和 u2相似度和 u2 u1相等， u1 u3等价与 u3 u1
    * @author dynamo
    * @param key 外面Map中的key
    * @param subKey 里面map中的key
@@ -228,7 +244,7 @@ public class FinalSimilarityService implements InitializingBean {
 
   /**
    * 得到用户操作行为数据相似度中 Map<String,Map> 集合中key的元素最多个一个Map集合 目的是为了遍历最大范围的Map,不漏掉uIds或movieNo
-   * 
+   *
    * @param List 第一个元素为 UserActionProportion 第二个元素为 Map集合
    * @return
    */
@@ -259,7 +275,7 @@ public class FinalSimilarityService implements InitializingBean {
 
   /**
    * 根据不同行为的占比，计算最终的相似度
-   * 
+   *
    * @param key 一个大map中的 key Map<String,Map<String,Double>>
    * @param subKey 大map中的 value对应的Map中的key
    * @param value
@@ -277,7 +293,7 @@ public class FinalSimilarityService implements InitializingBean {
       if (similarityMap == null) {
         continue;
       }
-   
+
       Double similarityValue = similarityMap.get(subKey);
       if (similarityValue == null) {
         continue;
@@ -288,9 +304,9 @@ public class FinalSimilarityService implements InitializingBean {
         timer.stop(), key, subKey, totalSimilarity);
     return totalSimilarity;
   }
-  
-  
-/*  private void writeDataToFile(Map<String, Map<String, Double>> map,String path){
+
+
+  private void writeDataToFile(Map<String, Map<String, Double>> map,String path){
     BufferedWriter bw = null;
     try{
     OutputStream fos = new FileOutputStream(path);
@@ -310,5 +326,5 @@ public class FinalSimilarityService implements InitializingBean {
       }
     }
   }
-  }*/
+  }
 }
