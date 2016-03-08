@@ -15,4 +15,9 @@ public interface ProdSimilarityService {
  * @param bseMovieActionData 基于有影片的特征向量
  */
   void prodSimilarity(UserActionData actionData);
+
+  /**
+   * 当各个操作完成后生成最终相似度
+   */
+  void prodFinalSimilarity();
 }

@@ -18,7 +18,7 @@ import com.wx.movie.rec.redis.RedisUtils;
  * @author   dynamo
  */
 @Service
-public class CommonService {
+public class ProSilityCommonService {
   @Autowired
   private RedisUtils redisUtils;
 /**

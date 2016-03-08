@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Stopwatch;
-import com.wx.movie.rec.common.util.SortMap;
+import com.wx.movie.rec.common.util.SortMapUtil;
 import com.wx.movie.rec.filter.service.FilterRecListService;
 
 /**
@@ -30,9 +30,9 @@ public class FilterRecListServiceImpl implements FilterRecListService {
   @Override
   public Map<String, Double> filter(Map<String, Double> candidateList, String uid) {
     Stopwatch timer = Stopwatch.createStarted();
-    Map<String, Double> sortedMap = SortMap.sortedMapByValue(candidateList, recListCount);
-    logger.info("FilterRecListServiceImpl  take total time {}, candidateList is {}", timer.stop(),
-        candidateList.size());
+    Map<String, Double> sortedMap = SortMapUtil.sortedMapByValue(candidateList, recListCount);
+    logger.info("FilterRecListServiceImpl  take total time {}, candidateList is {}, uid is {}",
+        timer.stop(), candidateList.size(), uid);
     return sortedMap;
   }
 

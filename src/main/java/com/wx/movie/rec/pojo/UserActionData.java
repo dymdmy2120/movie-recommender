@@ -30,4 +30,9 @@ public void setUserActionMap(Map<String, Set<String>> userActionMap) {
   this.userActionMap = userActionMap;
 }
 
+  @Override
+  public String toString() {
+    return "UserActionData [action=" + action + ", userActionMap=" + userActionMap + "]";
+  }
+
 }

@@ -1,8 +1,6 @@
 
 package com.wx.movie.rec.eigenvector.service;
 
-import java.util.List;
-
 import com.wx.movie.rec.pojo.UserActionData;
 
 /**
@@ -11,11 +9,11 @@ import com.wx.movie.rec.pojo.UserActionData;
  */
 public interface ProdEigenVectorService {
 /**
- * 
+ *
  * @author dynamo
  * @param userActionDatas :用户行为数据集合
  * 第一个元素是基于影片的行为操作数据，第二个元素是基于用户的行为操作数据
  */
- void produceEigenVector(List<UserActionData> userActionDatas);
- 
+  void produceEigenVector(UserActionData userActionDatas);
+
 }

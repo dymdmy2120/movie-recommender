@@ -8,6 +8,7 @@ import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Stopwatch;
@@ -30,6 +31,8 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
   private CommonService commonService;
   @Autowired
   private FilterRecListService filterRecListService;
+  @Value("${user.top.count}")
+  private int topCount;
 
   private static final Logger logger = LoggerFactory.getLogger(ProRecListBseMovieServiceIml.class);
 
@@ -42,12 +45,11 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
       return;
     }
     Map<String, Map<String, Double>> finalRecMap = Maps.newHashMap();// 为了展现出数据是否正确，才定义，否则没有意义
-    for (Map.Entry<String, Map<String, Double>> entry : finalSimilarityMap.entrySet()) {
-      String uid = entry.getKey();
+    for (User user : users) {
+      String uid = String.valueOf(user.getUid());
       Set<String> userLikes = commonService.getUsrLikeFromCache(uid);
       if (userLikes == null) {
-        logger.warn("when productRecList Set<String> userLikes is null , uid is {}",
-            entry.getKey());
+        // logger.warn("when productRecList Set<String> userLikes is null , uid is {}", uid);
         continue;
       }
       Map<String, Double> candidateList =
@@ -63,7 +65,7 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
   }
 
   /**
-   * 获取初步推荐的列表(获选推荐列表)
+   * 获取初步推荐的列表(侯选推荐列表)
    *
    * @param uid
    * @param finalSimilarityMap
@@ -72,13 +74,12 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
    * @return 影片no1，uid感兴趣程度
    */
   private Map<String, Double> getCandidateList(String uid,
-      Map<String, Map<String, Double>> finalSimilarityMap,
-      List<Movie> movies, Set<String> userLikes) {
+      Map<String, Map<String, Double>> finalSimilarityMap, List<Movie> movies, Set<String> userLikes) {
     Stopwatch timer = Stopwatch.createStarted();
     Map<String, Double> candidateSimilarity = Maps.newHashMap();
+    Set<String> mostSimiMvNos = getMostSimiliarityMovie(finalSimilarityMap, userLikes);
 
-    for (Movie movie : movies) {
-      String movieNo = movie.getMovieNo();
+    for (String movieNo : mostSimiMvNos) {
       // 如果推荐影片在用户喜爱列表之内则忽视
       if (commonService.isUserLike(uid, movieNo)) {
         continue;
@@ -87,8 +88,10 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
       for (String likeMovieNo : userLikes) {
         Map<String, Double> tempSimilarityMap = finalSimilarityMap.get(likeMovieNo);
         if (tempSimilarityMap == null) {
-          logger.warn("base on movie likeMovieNo:{} is not mapped in finalSimilarityMap",
-              likeMovieNo);
+          logger
+              .warn(
+                  "base on movie  likeMovieNo is not mapped in finalSimilarityMap likeMovieNo is {} , uid is {},recMovieNo is {}",
+                  likeMovieNo, uid, movieNo);
           continue;
         }
         Double similarity = tempSimilarityMap.get(movieNo);
@@ -96,9 +99,31 @@ public class ProRecListBseMovieServiceIml implements ProRecListSerivce {
       }
       candidateSimilarity.put(movieNo, interest);
     }
-    logger.debug(
-        "base on movie getCandidateList take total time {}, movie size is {}, userlike size is",
-        timer.stop(), movies.size(), userLikes.size());
+    // logger.debug("base on movie getCandidateList take total time {}, movie size is {}, userlike size is",timer.stop(),
+    // movies.size(), userLikes.size());
     return candidateSimilarity;
+  }
+
+  /**
+   * 从最终特征向量中获取与用户喜欢影片相似最高的影片数
+   *
+   * @param finalSimilarityMap
+   * @param likeMovies
+   * @return
+   */
+  private Set<String> getMostSimiliarityMovie(Map<String, Map<String, Double>> finalSimilarityMap,
+      Set<String> likeMovies) {
+    Stopwatch timer = Stopwatch.createStarted();
+    Map<String, Double> similarityMap = Maps.newHashMap();
+    for (String likeMovie : likeMovies) {
+      Map<String, Double> tempMap = finalSimilarityMap.get(likeMovie);
+      if (tempMap == null) {
+        logger.debug("likeMovie {} is not mapped in finalSimilarityMap", likeMovie);
+        continue;
+      }
+      tempMap = commonService.sortedSimilarity(tempMap);
+      similarityMap.putAll(tempMap);
+    }
+    return similarityMap.keySet();
   }
 }

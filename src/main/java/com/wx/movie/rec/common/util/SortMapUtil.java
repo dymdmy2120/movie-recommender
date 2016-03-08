@@ -20,7 +20,7 @@ import com.google.common.collect.Maps;
  * @author dynamo
  * @version
  */
-public class SortMap {
+public class SortMapUtil {
   /**
    * 对Map 根据Value进行从大到小排序，并且排序完后取出前面topCount
    *

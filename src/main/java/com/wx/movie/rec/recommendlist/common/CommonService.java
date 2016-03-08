@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.base.Stopwatch;
 import com.wx.movie.rec.common.enums.RedisKey;
-import com.wx.movie.rec.common.util.SortMap;
+import com.wx.movie.rec.common.util.SortMapUtil;
 import com.wx.movie.rec.recommendlist.pojo.Movie;
 import com.wx.movie.rec.recommendlist.pojo.User;
 import com.wx.movie.rec.redis.RedisUtils;
@@ -44,7 +44,7 @@ public class CommonService {
    */
   public Map<String, Double> sortedSimilarity(Map<String, Double> map) {
     Stopwatch timer = Stopwatch.createStarted();
-    Map<String, Double> sortedMap = SortMap.sortedMapByValue(map, topCount);
+    Map<String, Double> sortedMap = SortMapUtil.sortedMapByValue(map, topCount);
    logger.debug("sortSimilarity take total time {}, volume is {}",timer.stop(),map.size());
     return sortedMap;
   }

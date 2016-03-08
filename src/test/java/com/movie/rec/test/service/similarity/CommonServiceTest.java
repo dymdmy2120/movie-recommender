@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.movie.rec.test.service.BaseTest;
-import com.wx.movie.rec.similarity.common.CommonService;
+import com.wx.movie.rec.similarity.common.ProSilityCommonService;
 
 /**
  * Date:     2016年2月23日 下午7:58:07 <br/>
@@ -17,7 +17,7 @@ import com.wx.movie.rec.similarity.common.CommonService;
  */
 public class CommonServiceTest extends  BaseTest{
   @Autowired
-private CommonService commService;
+private ProSilityCommonService commService;
   
   @Test
   public void testHandlerUserActionData(){

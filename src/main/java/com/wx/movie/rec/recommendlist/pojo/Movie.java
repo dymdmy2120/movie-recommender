@@ -1,14 +1,22 @@
 package com.wx.movie.rec.recommendlist.pojo;
 
 public class Movie {
-  private String movieNo;
+  private String movieno;
 
-  public String getMovieNo() {
-    return movieNo;
+
+  public String getMovieno() {
+    return movieno;
   }
 
-  public void setMovieNo(String movieNo) {
-    this.movieNo = movieNo;
+
+  public void setMovieno(String movieno) {
+    this.movieno = movieno;
+  }
+
+
+  @Override
+  public String toString() {
+    return "Movie [movieNo=" + movieno + "]";
   }
 
 

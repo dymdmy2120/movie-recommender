@@ -89,7 +89,7 @@
     </appender> -->
 <!-- 将com.wx.movie包下的类记录的日志交给上一级root来处理 没有指定level继承root级别，
      root会根据不同类的日志级别输入到对应的appender 终端
-     additivity=false 默认为true就在自动义logger输入到指定的终端后，还要向上一级root输出，这样同一个级别日志记录两次
+     additivity=false 默认为true就在自定义logger输入到指定的终端后，还要向上一级root输出，这样同一个级别日志记录两次
      为false就是不向上一级输出
  -->
 	<logger name="com.wx.movie" level="DEBUG" />

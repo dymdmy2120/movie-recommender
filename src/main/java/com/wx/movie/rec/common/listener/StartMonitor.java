@@ -16,17 +16,15 @@ import com.wx.movie.rec.similarity.async.FinalSimilarityService;
  */
 public class StartMonitor extends ContextLoaderListener  {
 private FinalSimilarityService finalSimilarityService;
- 
+
   @Override
   public void contextInitialized(ServletContextEvent event) {
     super.contextInitialized(event);
-    ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());  
-    //获取bean  
-    finalSimilarityService = (FinalSimilarityService) applicationContext.getBean("finalSimilarityService");   
-    //异步执行计算基于用户的最终相似度
-    finalSimilarityService.bseUsrFinalSimilarity();
-    //异步执行计算基于影片的最终相似度
-    finalSimilarityService.bseMovieFinalSimilarity();
+    ApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(event.getServletContext());
+    //获取bean
+    finalSimilarityService = (FinalSimilarityService) applicationContext.getBean("finalSimilarityService");
+    // 异步执行计算最终相似度
+    finalSimilarityService.compuFinalSimilarity();
   }
 
   @Override

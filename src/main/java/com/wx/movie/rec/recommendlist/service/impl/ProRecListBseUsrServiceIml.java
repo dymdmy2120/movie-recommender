@@ -40,15 +40,17 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
       return;
     }
     Map<String, Map<String, Double>> finalRecMap = Maps.newHashMap();// 为了展现出数据是否正确，才定义，否则没有意义
-    for (Map.Entry<String, Map<String, Double>> entry : finalSimilarityMap.entrySet()) {
-      String uid = entry.getKey();
+    for (User user : users) {
+      String uid = String.valueOf(user.getUid());
       Set<String> userLikes = commonService.getUsrLikeFromCache(uid);
       if (userLikes == null) {
-        logger
-            .warn("when productRecList Set<String> userLikes is null , uid is {}", entry.getKey());
+        //logger  .warn("when productRecList Set<String> userLikes is null , uid is {}", entry.getKey());
         continue;
       }
       Map<String, Double> candidateList = getCandidateList(uid, finalSimilarityMap, userLikes);
+      if (candidateList == null) {
+        continue;
+      }
       Map<String, Double> finalRecList = filterRecListService.filter(candidateList, uid);
       finalRecMap.put(uid, finalRecList);
     }
@@ -70,6 +72,7 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
   private Map<String, Double> getCandidateList(String uid,
       Map<String, Map<String, Double>> finalSimilarityMap, Set<String> userLikes) {
     Map<String, Double> similiarty = finalSimilarityMap.get(uid);
+    // FIXME 当uid不存在 finalSimilarityMap 需要如何操作？在uid获取推荐列表时,默认推荐热门影片
     if (similiarty == null) {
       logger.warn("uid:{} is not mapped in finalSimilarityMap", uid);
       return null;
@@ -96,7 +99,7 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
   }
 
   /**
-   * 根据和用户 uid最相似的前十几个用户，然后将这十几个用户喜欢
+   * 根据和用户 uid最相似的前十几个用户，然后将这十几个用户喜欢的影片和用户关联
    *
    * @param topSimilarity
    * @return <M1 ,[uid1,uid2]>表示影片M1被用户uid1 uid2所喜欢
@@ -109,7 +112,7 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
       String uId = entry.getKey();
       Set<String> movies = commonService.getUsrLikeFromCache(uId);
       if (movies == null) {
-        logger.warn("base on user uid:{} do not have UserList in Cache", uId);
+        logger.warn("base on user uid:{} do not have UserLike in Cache", uId);
         continue;
       }
       for (String movie : movies) {

@@ -11,4 +11,9 @@ public class User {
     this.uid = uid;
   }
 
+  @Override
+  public String toString() {
+    return "User [uid=" + uid + "]";
+  }
+
 }
