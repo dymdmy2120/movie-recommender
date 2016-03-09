@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.wx.movie.rec.similarity.common.FinalSilityCommonService;
@@ -26,15 +27,16 @@ import com.wx.movie.rec.similarity.pojo.UserActionProportion;
  * @author dynamo
  * @version
  */
+@Service
 public class LoadConfigFileUtil implements InitializingBean{
   @Value("${user.action.json}")
   private String userActionJson;
 
-  private static List<UserActionProportion> userActionProportions;
+  private List<UserActionProportion> userActionProportions;
   private TypeReference<List<UserActionProportion>> tr;
   private Logger logger = LoggerFactory.getLogger(FinalSilityCommonService.class);
 
-  public static List<UserActionProportion> getActionProportions() {
+  public List<UserActionProportion> getActionProportions() {
     return userActionProportions;
   }
   @PostConstruct

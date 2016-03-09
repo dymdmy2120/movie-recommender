@@ -10,7 +10,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Stopwatch;
-import com.wx.movie.rec.common.enums.Constant;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.pojo.UserActionData;
 import com.wx.movie.rec.recommendlist.service.ProRecListSerivce;
@@ -46,25 +46,25 @@ public class ProdSimilarityBseUsrServiceImpl implements ProdSimilarityService {
   public void prodSimilarity(UserActionData actionData) {
     Stopwatch timer = Stopwatch.createStarted();
     proSimComService.handleUserActionData(actionData.getAction(), actionData.getUserActionMap(),
-        Constant.BSE_USE);
+        RecommendType.BSE_USER);
     //标识 当前用户行为操作的相似度完成的个数，当所有用户行为操作完成了后，再进行根据行为比例，得到最终相似度
-    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, Constant.BSE_USE));
+    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER));
     logger.info("ProdSimilarityBseUsrServiceImspl.prodSimilarity useraction is {} base on {},take total time {}",
-      actionData.getAction(), Constant.BSE_USE, timer.stop());
+            actionData.getAction(), RecommendType.BSE_USER, timer.stop());
   }
 
   @Override
   @Async("computeFinalSimilarityExecutor")
   public void prodFinalSimilarity() {
     while (true) {
-      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, Constant.BSE_USE);
+      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER);
       int times = fnlSimComService.getActionTimes(rtKey);
 
       if (times == fnlSimComService.getActionSize()) {
         Stopwatch timer = Stopwatch.createStarted();
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity =
-            fnlSimComService.getFinalSimilarity(Constant.BSE_USE);
+            fnlSimComService.getFinalSimilarity(RecommendType.BSE_USER);
         // writeDataToFile(finalSimilarity,"/home/dynamo/bseUser.txt");
         // 调用生成推荐列表模块
         bseUsrProRecListService.productRecList(finalSimilarity);

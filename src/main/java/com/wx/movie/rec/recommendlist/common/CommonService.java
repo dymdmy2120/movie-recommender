@@ -1,5 +1,7 @@
 package com.wx.movie.rec.recommendlist.common;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,8 +14,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.google.common.base.Stopwatch;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.enums.RedisKey;
+import com.wx.movie.rec.common.util.JsonMapperUtil;
 import com.wx.movie.rec.common.util.SortMapUtil;
+import com.wx.movie.rec.dao.entity.UserReclist;
 import com.wx.movie.rec.recommendlist.pojo.Movie;
 import com.wx.movie.rec.recommendlist.pojo.User;
 import com.wx.movie.rec.redis.RedisUtils;
@@ -57,7 +62,7 @@ public class CommonService {
    */
   public Set<String> getUsrLikeFromCache(String uid) {
     @SuppressWarnings("unchecked")
-    Set<String> userLikes = redisUtils.getT(String.format(RedisKey.USER_LIKE_MAP, uid), Set.class);
+    Set<String> userLikes = redisUtils.getT(String.format(RedisKey.UID_USER_LIKE, uid), Set.class);
     if (CollectionUtils.isEmpty(userLikes)) {
       logger.warn("Get UserLike From Cache Fail,And Set<String> is null , UID is {}", uid);
       return null;
@@ -106,5 +111,26 @@ public class CommonService {
       return true;
     }
     return userLikes.contains(movieNo);
+  }
+
+  public void setRecListToCache(String uid, Set<String> movieNos, RecommendType method) {
+    String reKey = String.format(RedisKey.UID_TYPE_REC_LIST, uid, method.getVal());
+    boolean ret = redisUtils.setT(reKey, movieNos);
+    if (!ret) {
+      logger.warn("Set RecListToCache fail Uid is {}", uid);
+    }
+  }
+  /**
+   * 包装用户推荐结果对象
+   */
+  public UserReclist packagUserRecLists(String uid, Map<String, Double> map,
+      RecommendType method) {
+  UserReclist recList = new UserReclist();
+  Date currDate =Calendar.getInstance().getTime();
+  recList.setModifyTime(currDate);
+  recList.setReclistJson(JsonMapperUtil.getInstance().toJson(map));
+  recList.setRecType(method.getVal());
+    recList.setuId(uid);
+    return recList;
   }
 }

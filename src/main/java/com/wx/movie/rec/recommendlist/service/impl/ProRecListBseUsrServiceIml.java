@@ -13,11 +13,14 @@ import org.springframework.stereotype.Service;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.util.JsonMapperUtil;
+import com.wx.movie.rec.dao.entity.UserReclist;
 import com.wx.movie.rec.filter.service.FilterRecListService;
 import com.wx.movie.rec.recommendlist.common.CommonService;
 import com.wx.movie.rec.recommendlist.pojo.User;
 import com.wx.movie.rec.recommendlist.service.ProRecListSerivce;
+import com.wx.movie.rec.recommendlist.service.RecDataService;
 
 /**
  * 基于用户推荐 生成推荐列表
@@ -30,6 +33,8 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
   private CommonService commonService;
   @Autowired
   private FilterRecListService filterRecListService;
+  @Autowired
+  private RecDataService recDataServcie;
   private static final Logger logger = LoggerFactory.getLogger(ProRecListBseUsrServiceIml.class);
 
   @Override
@@ -39,6 +44,7 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
     if (CollectionUtils.isEmpty(users)) {
       return;
     }
+    List<UserReclist> userRecLists = Lists.newArrayList();
     Map<String, Map<String, Double>> finalRecMap = Maps.newHashMap();// 为了展现出数据是否正确，才定义，否则没有意义
     for (User user : users) {
       String uid = String.valueOf(user.getUid());
@@ -51,9 +57,24 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
       if (candidateList == null) {
         continue;
       }
+      // 根据条件对初步推荐结果过滤
       Map<String, Double> finalRecList = filterRecListService.filter(candidateList, uid);
+
+      // 封装推荐结果entity
+      UserReclist userRecList =
+          commonService.packagUserRecLists(uid, finalRecList, RecommendType.BSE_USER);
+      userRecLists.add(userRecList);
       finalRecMap.put(uid, finalRecList);
+
+      // 保存到缓存中
+      commonService.setRecListToCache(uid, finalRecList.keySet(), RecommendType.BSE_USER);
     }
+    // 最终推荐结果保存到数据库中
+    int ret = recDataServcie.saveRecList(userRecLists);
+    logger.debug("Base On User save UserRecList success influence size is {},useRecList size is{}",
+        ret, userRecLists.size());
+    // 写入到缓存中
+
     logger
         .info(
             "productRecList Base On User take total time {}, finalSimilarityMap size is {} And fianlRecList Result is {}",

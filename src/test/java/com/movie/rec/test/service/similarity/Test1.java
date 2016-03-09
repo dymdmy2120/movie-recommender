@@ -19,7 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
 import com.movie.rec.test.service.BaseTest;
-import com.wx.movie.rec.common.enums.Constant;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.common.util.JsonMapperUtil;
 import com.wx.movie.rec.redis.RedisUtils;
@@ -27,7 +27,7 @@ import com.wx.movie.rec.similarity.pojo.UserActionProportion;
 
 /**
  * Date: 2016年2月16日 下午8:22:42 <br/>
- * 
+ *
  * @author dynamo
  */
 public class Test1 extends BaseTest implements InitializingBean {
@@ -41,13 +41,13 @@ public class Test1 extends BaseTest implements InitializingBean {
   private TypeReference<List<UserActionProportion>> tr;
   private Logger logger = LoggerFactory.getLogger(Test1.class);
 
-  private String[] methodArray = {Constant.BSE_USE, Constant.BSE_MOVIE};
+  private RecommendType[] methodArray = {RecommendType.BSE_USER, RecommendType.BSE_MOVIE};
 
   @Test
   public void test() {
     Stopwatch timer = Stopwatch.createStarted();
     String rootPath = "/home/dynamo/";
-    for (String method : methodArray) {
+    for (RecommendType method : methodArray) {
      String dir = rootPath+method;
       for (UserActionProportion userActionPro : userActionProportion) {
         String rKey =
@@ -65,12 +65,14 @@ public class Test1 extends BaseTest implements InitializingBean {
 
   @PostConstruct
   public void init() {
-    System.out.println(redisUtils.exists(String.format(RedisKey.COUNT_SIMILARITY, Constant.BSE_USE)));
-    if(redisUtils.exists(String.format(RedisKey.COUNT_SIMILARITY, Constant.BSE_USE))){
-    int count = redisUtils.getInt(String.format(RedisKey.COUNT_SIMILARITY, Constant.BSE_USE));
+    System.out.println(redisUtils.exists(String.format(RedisKey.COUNT_SIMILARITY,
+        RecommendType.BSE_USER)));
+    if (redisUtils.exists(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER))) {
+      int count =
+          redisUtils.getInt(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER));
     System.out.println("count"+count);
     }
-    
+
     tr = new TypeReference<List<UserActionProportion>>() {};
   }
 
@@ -96,10 +98,12 @@ public class Test1 extends BaseTest implements InitializingBean {
     } catch (Exception e) {
       logger.error("parse user_action.json fail", e);
     } finally {
-      if (fis != null) fis.close();
+      if (fis != null) {
+        fis.close();
+      }
     }
   }
-  
+
   private void writeFile(String filePath,String content){
     try {
       File file = new File(filePath);
@@ -108,7 +112,7 @@ public class Test1 extends BaseTest implements InitializingBean {
       }
       filePath = filePath+"/data.txt";
     FileWriter fw = new FileWriter(filePath);
- 
+
       fw.write(content);
     } catch (IOException e) {
       e.printStackTrace();

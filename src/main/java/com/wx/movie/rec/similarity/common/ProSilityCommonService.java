@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.google.common.collect.Maps;
 import com.wx.movie.rec.common.enums.Constant;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.redis.RedisUtils;
 
@@ -28,20 +29,21 @@ public class ProSilityCommonService {
  * @param actionMap 用户操作映射(基于用户 或者基于影片的行为操作数据)
  * @param method 基于用户计算相似度，还是基于影片计算相似度 bseUsr或者bseMovie
  */
-  public void handleUserActionData(String action,Map<String,Set<String>> actionMap,String method){
+  public void handleUserActionData(String action, Map<String, Set<String>> actionMap,
+      RecommendType method) {
   Set<String> uidOrMovNoSets = actionMap.keySet();
   List<String> uidOrMoVNoLists = new ArrayList<String>(uidOrMovNoSets);
   int size = uidOrMoVNoLists.size();
-  
+
   for(int i=0; i<size-1; i++){
     Map<String,Double> similarityMap = Maps.newHashMap();
     String movieNo = uidOrMoVNoLists.get(i);
     Set<String> uIds1 = actionMap.get(movieNo);
     int uIds1Size = uIds1.size();
     for(int k=i+1; k<size; k++){
- 
+
       String movieNo1 = uidOrMoVNoLists.get(k);
-     
+
       Set<String> uIds2 = actionMap.get(movieNo1);
       int intersection = intersection(uIds1,uIds2);
      double similarityValue =  computeSimilarity(intersection,uIds1Size,uIds2.size());
@@ -55,7 +57,7 @@ public class ProSilityCommonService {
 /**
  * 求出集合set1 和集合set2 之间的交集
  * @author dynamo
- * @param set1 
+ * @param set1
  * @param set2
  * @return 两个集合交集后的元素个数
  */

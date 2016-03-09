@@ -6,7 +6,6 @@ package com.wx.movie.rec.common.enums;
  */
 public interface Constant {
 
-  double DEFAULT_VALUE = 0.001;    
-  String BSE_USE="bseUsr";
-  String BSE_MOVIE="bseMovie";
+  double DEFAULT_VALUE = 0.001;
+
 }

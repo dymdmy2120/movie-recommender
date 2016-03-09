@@ -15,11 +15,13 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.wx.movie.rec.common.enums.RecommendType;
 import com.wx.movie.rec.common.enums.RedisKey;
 import com.wx.movie.rec.common.exception.DataException;
 import com.wx.movie.rec.common.util.JsonMapperUtil;
@@ -37,16 +39,19 @@ import com.wx.movie.rec.similarity.pojo.UserActionProportion;
  * @author dynamo
  * @version
  */
+@Service
 public class FinalSilityCommonService {
   @Autowired
   private RedisUtils redisUtils;
+  @Autowired
+  private LoadConfigFileUtil loadConfig;
   private Logger logger = LoggerFactory.getLogger(FinalSilityCommonService.class);
   private List<UserActionProportion> userActionProportions;
   private TypeReference<Map<String, Double>> tr1;
 
   @PostConstruct
   public void init() {
-    userActionProportions = LoadConfigFileUtil.getActionProportions();
+    userActionProportions = loadConfig.getActionProportions();
     tr1 = new TypeReference<Map<String, Double>>() {};
   }
 
@@ -70,7 +75,7 @@ public class FinalSilityCommonService {
    * @param method
    * @return 最终的相似度  U1 <U2,0.01> <U3,0.002> 或者M1 <M2,0.01> <M3,0.002>
    */
-  public Map<String, Map<String, Double>> getFinalSimilarity(String method) {
+  public Map<String, Map<String, Double>> getFinalSimilarity(RecommendType method) {
     Stopwatch timer = Stopwatch.createStarted();
     // 最终相似度映射
     Map<String, Map<String, Double>> finalSimarityMap = Maps.newHashMap();
@@ -150,7 +155,7 @@ public class FinalSilityCommonService {
   }
 
   private Map<UserActionProportion, Map<String, Map<String, Double>>> getSimilarityMapLists(
-      String method) {
+      RecommendType method) {
     Stopwatch timer = Stopwatch.createStarted();
     Map<UserActionProportion, Map<String, Map<String, Double>>> map = Maps.newHashMap();
 
@@ -170,7 +175,7 @@ public class FinalSilityCommonService {
    * @param List 第一个元素为 UserActionProportion 第二个元素为 Map集合
    * @return
    */
-  private List<Object> getMaxScope(String method) {
+  private List<Object> getMaxScope(RecommendType method) {
     Stopwatch timer = Stopwatch.createStarted();
     String rKeyTemp = null;
     int maxSize = 0;

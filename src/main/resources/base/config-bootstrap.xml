@@ -18,7 +18,7 @@
 	</bean>
 -->	
   <import resource="classpath*:/config-property.xml"/>
-<!--   <import resource="classpath*:/config-mysql.xml"/> -->
+   <import resource="classpath*:/config-mysql.xml"/>
    <import resource="classpath*:/config-rabbitmq.xml"/>
   <import resource="classpath*:/config-redis.xml"/>
   <import resource="classpath*:/config-executor.xml"/>
