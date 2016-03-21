@@ -60,10 +60,16 @@
 	    </rabbit:bindings>
 	</rabbit:topic-exchange> -->
 
-	<bean id="userActionQDataLister" class="com.wx.movie.rec.mq.UserActionDataQLister" />
+	<bean id="bseUsrLister" class="com.wx.movie.rec.mq.BseUsrQLister" />
 	<rabbit:listener-container connection-factory="connectionFactory" message-converter="jsonMessageConverter" 
 		concurrency="6" max-concurrency="10" acknowledge="manual">
-	  <rabbit:listener ref="userActionQDataLister" method="onMessage" queue-names="USER_ACTION_DATA_QUEUE" />
+	  <rabbit:listener ref="bseUsrLister" method="onMessage" queue-names="USER_ACTION_BSEUSR_QUEUE" />
+	</rabbit:listener-container>
+	
+	<bean id="bseMovieLister" class="com.wx.movie.rec.mq.BseMovieQLister" />
+	<rabbit:listener-container connection-factory="connectionFactory" message-converter="jsonMessageConverter" 
+		concurrency="6" max-concurrency="10" acknowledge="manual">
+	  <rabbit:listener ref="bseMovieLister" method="onMessage" queue-names="USER_ACTION_BSEMOVIE_QUEUE" />
 	</rabbit:listener-container>
 
 </beans>

@@ -48,7 +48,7 @@ public class LoadConfigFileUtil implements InitializingBean{
     FileInputStream fis = null;
     try {
       // 得到classpath目录路径
-      String path = this.getClass().getResource("/").toURI().getPath();
+      String path = Thread.currentThread().getContextClassLoader().getResource("/").toURI().getPath();
       path = path + userActionJson;
       logger.info("配置用户操作和对应比例路径：" + path);
       File jsonFile = new File(path);
