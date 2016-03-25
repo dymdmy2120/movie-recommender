@@ -1,4 +1,1 @@
-[{"action":"search_movie","proportion":"0.1"},
-{"action":"browse_movie","proportion":"0.1"},
-{"action":"attention_movie","proportion":"0.4"},
-{"action":"comment_movie","proportion":"0.4"}]
+[{"action":"test","proportion":"1"}]

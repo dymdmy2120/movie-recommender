@@ -49,7 +49,7 @@ public class ProdSimilarityBseMovieServiceImpl implements ProdSimilarityService 
     proSimComService.handleUserActionData(actionData.getAction(), actionData.getUserActionMap(),
         RecommendType.BSE_MOVIE);
   //标识 当前用户行为操作的相似度完成的个数，当所有用户行为操作完成了后，再进行根据行为比例，得到最终相似度
-    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_MOVIE));
+    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_MOVIE.getVal()));
     logger.info("ProdSimilarityBseMovie.prodSimilarity useraction is {} base on {},take total time {}",
         actionData.getAction(), RecommendType.BSE_MOVIE, timer.stop());
   }
@@ -58,19 +58,29 @@ public class ProdSimilarityBseMovieServiceImpl implements ProdSimilarityService 
   @Async("computeFinalSimilarityExecutor")
   public void prodFinalSimilarity() {
     while (true) {
-      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_MOVIE);
+     try {
+    	Thread.sleep(100);
+    	} catch (InterruptedException e) {
+    			logger.error("prodFinalSimilarity sleep error ");
+    	}
+      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_MOVIE.getVal());
       int times = fnlSimComService.getActionTimes(rtKey);
-
       if (times == fnlSimComService.getActionSize()) {
         Stopwatch timer = Stopwatch.createStarted();
+        try{
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity =
             fnlSimComService.getFinalSimilarity(RecommendType.BSE_MOVIE);
         // writeDataToFile(finalSimilarity,"/home/dynamo/bseMovie.txt");
         // 调用生成推荐列表模块
         bseMovieProRecListService.productRecList(finalSimilarity);
-        // 计算完后将标志位置为0
-        redisUtils.setInt(rtKey, 0);
+        }catch(Exception e){
+          logger.error("prodFinalSimilarity bseMovie error",e);        	
+        }finally{
+        	//无论是否抛出异常都要将缓存中标志位置为0
+        	redisUtils.setInt(rtKey, 0);
+        }
+        
         logger.info("BseUsrFinalSimilarity Base on Movie take time is {}", timer.stop());
       }
     }

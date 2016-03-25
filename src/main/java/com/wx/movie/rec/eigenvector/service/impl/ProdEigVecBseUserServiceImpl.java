@@ -23,7 +23,7 @@ public class ProdEigVecBseUserServiceImpl implements ProdEigenVectorService {
 
   @Qualifier("bseUsrSimilarity")
   @Autowired
-  private ProdSimilarityService bseMovieSimilarityService;
+  private ProdSimilarityService bseUsrSimilarityService;
 
   private Logger logger = LoggerFactory.getLogger(ProdEigVecBseUserServiceImpl.class);
 
@@ -31,6 +31,6 @@ public class ProdEigVecBseUserServiceImpl implements ProdEigenVectorService {
   @Async("prodEigenVectorExecutor")
   public void produceEigenVector(UserActionData userActionData) {
    //调用上一层 计算相似度
-    bseMovieSimilarityService.prodSimilarity(userActionData);
+	  bseUsrSimilarityService.prodSimilarity(userActionData);
   }
 }

@@ -8,7 +8,6 @@ public class FeedBack {
     private String uId;
 
     private String movieNo;
-  private Byte recType;
     private Date modifyTime;
 
     public Integer getId() {
@@ -42,13 +41,4 @@ public class FeedBack {
     public void setModifyTime(Date modifyTime) {
         this.modifyTime = modifyTime;
     }
-
-  public Byte getRecType() {
-    return recType;
-  }
-
-  public void setRecType(Byte recType) {
-    this.recType = recType;
-  }
-
 }

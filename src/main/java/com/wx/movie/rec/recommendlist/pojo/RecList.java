@@ -1,6 +1,6 @@
 package com.wx.movie.rec.recommendlist.pojo;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Date:     2016年2月27日 上午8:34:17
@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class RecList {
   private String uid;
-  private List<String> movieNos;
+  private Set<String> movieNos;
 
   public String getUid() {
     return uid;
@@ -26,12 +26,13 @@ public class RecList {
     this.uid = uid;
   }
 
-  public List<String> getMovieNos() {
-    return movieNos;
-  }
+public Set<String> getMovieNos() {
+	return movieNos;
+}
 
-  public void setMovieNos(List<String> movieNos) {
-    this.movieNos = movieNos;
-  }
+public void setMovieNos(Set<String> movieNos) {
+	this.movieNos = movieNos;
+}
+
 
 }

@@ -232,7 +232,7 @@ public class FinalSilityCommonService {
   }
 
 
-  private void writeDataToFile(Map<String, Map<String, Double>> map, String path) {
+  public void writeDataToFile(Map<String, Map<String, Double>> map, String path) {
     BufferedWriter bw = null;
     try {
       OutputStream fos = new FileOutputStream(path);

@@ -25,8 +25,8 @@ public class DataExceptionResolver implements HandlerExceptionResolver {
     // 暂时只考虑异步请求
     if (e instanceof DataException) {
       logger.error("DataExceptionResolver resolve DataException", e);
-      DataException goodsException = (DataException) e;
-      response = goodsException.getCommonResponse();
+      DataException dataException = (DataException) e;
+      response = dataException.getCommonResponse();
       if (response == null) {
         response = CommonResponse.fail();
       }

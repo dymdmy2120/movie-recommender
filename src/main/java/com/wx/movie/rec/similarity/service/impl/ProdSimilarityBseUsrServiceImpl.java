@@ -48,7 +48,7 @@ public class ProdSimilarityBseUsrServiceImpl implements ProdSimilarityService {
     proSimComService.handleUserActionData(actionData.getAction(), actionData.getUserActionMap(),
         RecommendType.BSE_USER);
     //标识 当前用户行为操作的相似度完成的个数，当所有用户行为操作完成了后，再进行根据行为比例，得到最终相似度
-    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER));
+    redisUtils.incr(String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER.getVal()));
     logger.info("ProdSimilarityBseUsrServiceImspl.prodSimilarity useraction is {} base on {},take total time {}",
             actionData.getAction(), RecommendType.BSE_USER, timer.stop());
   }
@@ -57,19 +57,28 @@ public class ProdSimilarityBseUsrServiceImpl implements ProdSimilarityService {
   @Async("computeFinalSimilarityExecutor")
   public void prodFinalSimilarity() {
     while (true) {
-      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER);
+    	  try {
+    		Thread.sleep(200);
+    	} catch (InterruptedException e) {
+    			logger.error("prodFinalSimilarity sleep error ");
+    		}
+      String rtKey = String.format(RedisKey.COUNT_SIMILARITY, RecommendType.BSE_USER.getVal());
       int times = fnlSimComService.getActionTimes(rtKey);
-
       if (times == fnlSimComService.getActionSize()) {
         Stopwatch timer = Stopwatch.createStarted();
+        try{
         // 计算最终的相似度
         Map<String, Map<String, Double>> finalSimilarity =
             fnlSimComService.getFinalSimilarity(RecommendType.BSE_USER);
-        // writeDataToFile(finalSimilarity,"/home/dynamo/bseUser.txt");
+        //fnlSimComService.writeDataToFile(finalSimilarity,"D://bseUser.txt");
         // 调用生成推荐列表模块
         bseUsrProRecListService.productRecList(finalSimilarity);
-        // 计算完后将标志位置为0
-        redisUtils.setInt(rtKey, 0);
+      }catch(Exception e){
+    	  logger.error("prodFinalSimilarity error",e);
+      } finally{
+      	//无论是否抛出异常都要将缓存中的key置为0
+      	redisUtils.setInt(rtKey, 0);
+      }
         logger.info("BseUsrFinalSimilarity Base on User take time is {}", timer.stop());
       }
   }

@@ -48,7 +48,7 @@ public class RedisUtils {
   /**
    * DEFALT_EXPIRE_TIME:默认过期时间  10days.
    */
-  private static final int DEFALT_EXPIRE_TIME = 24 * 60 * 60 * 10;
+  private static final int DEFALT_EXPIRE_TIME = 10 * 60 * 60 ;
   
   private ShardedJedisPool shardedJedisPool;
 

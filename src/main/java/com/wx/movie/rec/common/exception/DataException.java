@@ -1,7 +1,7 @@
 package com.wx.movie.rec.common.exception;
 
 /**
- * 商品中心的异常处理类
+ * 推荐服务异常类
  */
 public class DataException extends RuntimeException {
 

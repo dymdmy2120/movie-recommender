@@ -42,6 +42,7 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
     Stopwatch timer = Stopwatch.createStarted();
     List<User> users = commonService.getUserFromCache();
     if (CollectionUtils.isEmpty(users)) {
+    	logger.info("bseUser productRecList user list in cache is empty");
       return;
     }
     List<UserReclist> userRecLists = Lists.newArrayList();
@@ -70,10 +71,13 @@ public class ProRecListBseUsrServiceIml implements ProRecListSerivce {
       commonService.setRecListToCache(uid, finalRecList.keySet(), RecommendType.BSE_USER);
     }
     // 最终推荐结果保存到数据库中
+    if(CollectionUtils.isEmpty(userRecLists)){
+    	logger.error("bseUsr proRecList is empty");
+    	return ;
+    }
     int ret = recDataServcie.saveRecList(userRecLists);
     logger.debug("Base On User save UserRecList success influence size is {},useRecList size is{}",
         ret, userRecLists.size());
-    // 写入到缓存中
 
     logger
         .info(
